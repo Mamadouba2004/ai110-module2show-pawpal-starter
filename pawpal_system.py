@@ -105,6 +105,14 @@ class Scheduler:
     def get_all_tasks(self) -> List[Task]:
         return self.owner.get_all_tasks()
 
+    def filter_by_pet(self, pet_name: str) -> List[Task]:
+        """Returns all tasks that belong to a specific pet by name."""
+        tasks = []
+        for pet in self.owner.pets:
+            if pet.name == pet_name:
+                tasks.extend(pet.get_tasks())
+        return tasks
+
     def sort_by_time(self):
         return sorted(self.get_all_tasks(), key=lambda t: t.time)
 

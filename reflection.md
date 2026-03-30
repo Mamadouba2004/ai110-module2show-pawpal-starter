@@ -46,6 +46,8 @@ The conflict detection only checks for exact time matches, not overlapping durat
 - Describe one moment where you did not accept an AI suggestion as-is.
 - How did you evaluate or verify what the AI suggested?
 
+Copilot suggested replacing get_all_tasks() with a one-line list comprehension. I kept the explicit loop version because it's easier to read and debug, even though the list comprehension is more Pythonic. 
+
 ---
 
 ## 4. Testing and Verification
