@@ -13,6 +13,10 @@ I designed four classes: Owner to manage user info, Pet to store pet details and
 - Did your design change during implementation?
 - If yes, describe at least one change and why you made it.
 
+I realized Scheduler needs an extra method I didn't plan for
+I moved a method from Owner to Scheduler because it made more sense there
+I added a next_due_date attribute to Task for recurring tasks 
+
 ---
 
 ## 2. Scheduling Logic and Tradeoffs
