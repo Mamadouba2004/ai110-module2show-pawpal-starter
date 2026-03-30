@@ -32,3 +32,11 @@ print("\n=== Conflict Check ===")
 conflicts = scheduler.detect_conflicts()
 for warning in conflicts:
     print(warning)
+
+# Test recurring task
+print("\n=== Recurring Task Test ===")
+morning_walk = dog.get_tasks()[0]
+print(f"Before: {morning_walk.description} - Complete: {morning_walk.is_complete}")
+morning_walk.mark_complete()
+scheduler.handle_recurring()
+print(f"After marking complete, total dog tasks: {len(dog.get_tasks())}")

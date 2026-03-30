@@ -31,6 +31,7 @@ I added a next_due_date attribute to Task for recurring tasks
 - Describe one tradeoff your scheduler makes.
 - Why is that tradeoff reasonable for this scenario?
 
+The conflict detection only checks for exact time matches, not overlapping durations. For example, a 30-minute task at 08:00 and a 10-minute task at 08:15 would not be flagged as a conflict even though they overlap. This is a reasonable tradeoff for simplicity but would need to be improved in a production system.
 ---
 
 ## 3. AI Collaboration
