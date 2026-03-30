@@ -113,16 +113,40 @@ if st.button("Generate schedule"):
         st.info("No tasks to schedule yet! Add some above.")
     else:
         st.markdown("### 📅 Today's Schedule")
+        
+        # Format the tasks into a list of dictionaries for a professional st.table/dataframe
+        table_data = []
         for t in sorted_tasks:
-            # Check for which pet this task belongs to for better display
             pet_owner_name = next((p.name for p in st.session_state.owner.pets if t in p.tasks), "Unknown Pet")
-            st.write(f"**{t.time}** - {t.description} for {pet_owner_name} ({t.duration} mins, {t.priority} priority)")
+            table_data.append({
+                "Time": t.time,
+                "Pet": pet_owner_name,
+                "Task": t.description,
+                "Duration (mins)": t.duration,
+                "Priority": t.priority,
+                "Status": "✅ Complete" if t.is_complete else "⏳ Pending"
+            })
+            
+        # Display the schedule using Streamlit's table component
+        st.table(table_data)
         
         # Checking for any conflicts
         conflicts = scheduler.detect_conflicts()
         if conflicts:
-            st.error("⚠️ Overlapping times detected:")
+            st.warning("⚠️ **Heads up! Scheduling conflicts detected:**")
             for c in conflicts:
-                st.write(f"- {c}")
+                st.error(f"- {c}")
+            st.info("💡 Tip: Try adjusting the times of the overlapping tasks so you aren't double-booked!")
         else:
-            st.success("✅ No scheduling conflicts detected!")
+            st.success("✅ Perfect! No scheduling conflicts detected.")
+            
+        st.divider()
+        st.subheader("🤖 Smart Assistant")
+        st.markdown("Need to squeeze in another task?")
+        duration_needed = st.number_input("Duration needed (minutes)", min_value=1, max_value=120, value=15)
+        if st.button("Find Next Available Slot"):
+            suggested_time = scheduler.suggest_next_available_slot(duration_needed)
+            if suggested_time != "No available slots":
+                st.success(f"🎉 The next available {duration_needed}-minute slot is at **{suggested_time}**!")
+            else:
+                st.error(f"❌ Schedule is too full! Could not find a {duration_needed}-minute gap.")

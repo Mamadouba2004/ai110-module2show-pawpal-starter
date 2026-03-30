@@ -42,15 +42,27 @@ pip install -r requirements.txt
 6. Connect your logic to the Streamlit UI in `app.py`.
 7. Refine UML so it matches what you actually built.
 
-## Smarter Scheduling
+## Key Features & Algorithms
 
-PawPal+ includes intelligent scheduling features:
+PawPal+ includes an intelligent `Scheduler` engine powered by efficient data structures and algorithms:
 
-- **Sort by time**: Tasks are automatically sorted chronologically so you always see what's coming up next.
-- **Filter by pet**: View tasks for a specific pet by name.
+- **Chronological Task Sorting (Timsort)**: Leverages Python's highly optimized built-in sorting combined with lambda functions to dynamically merge and order upcoming tasks—from all pets—into a single timeline.
+- **O(N) Conflict Detection**: Uses a cycle-detection approach powered by Hash Sets (`set()`). By tracking mapped times, it detects duplicate schedules in a single pass over the data, ensuring fast $O(N)$ execution instead of slower nested loop checks.
+- **Automated Recurrence Engine**: Features a safe-iteration system that checks frequency and completion states (with case-insensitive parsing) to automatically clone completed "daily" tasks and seamlessly requeue them as fresh, incomplete events.
+- **Dynamic Comprehension Filtering**: Utilizes fast Python list comprehensions to cleanly slice large datasets of tasks by their completion statuses or specific pet owners without mutating existing lists.
 - **Filter by status**: See only completed or incomplete tasks.
 - **Conflict detection**: The scheduler warns you when two tasks are scheduled at the same time.
 - **Recurring tasks**: Daily tasks automatically reschedule for the next day when marked complete.
+
+### 🚀 Challenge 1: Advanced Algorithmic Capability (Agent Mode)
+As part of extending the system's logic, PawPal+ includes a **"Next Available Slot" Suggestion Algorithm**.
+
+**What it does:** Given a desired task duration (e.g., 30 minutes), the algorithm scans the owner's entire schedule, converts `HH:MM` time strings into flat integer minutes (from midnight), and iterates chronologically to find the earliest continuous open gap between existing tasks falling between an `08:00` start and `20:00` end-of-day. 
+
+**How Copilot Agent Mode was used:**
+1. I utilized **GitHub Copilot Agent Mode** to ideate the feature by prompting for a third algorithmic capability requiring interval math.
+2. The Agent autonomously wrote the logic for `suggest_next_available_slot()`, specifically handling the tricky time conversions (`hh * 60 + mm`) and edge cases (e.g., jumping the `current_time` pointer to the end of existing tasks rather than overlapping).
+3. The Agent seamlessly hooked up the new backend algorithm into the `app.py` Streamlit layout, producing a full-stack integrated feature under the **"🤖 Smart Assistant"** tab.
 
 ## Testing PawPal+
 

@@ -147,3 +147,38 @@ class Scheduler:
                     )
                     new_tasks.append(new_task)
             pet.tasks.extend(new_tasks)
+
+    def suggest_next_available_slot(self, task_duration: int, day_start: str = "08:00", day_end: str = "20:00") -> str:
+        """
+        Algorithms Challenge: Finds the next available time slot that can fit a task of a given duration.
+        Converts time to minutes from midnight, checks gaps between scheduled tasks, and returns a time string.
+        """
+        def time_to_mins(t_str):
+            h, m = map(int, t_str.split(':'))
+            return h * 60 + m
+            
+        def mins_to_time(m_int):
+            h = m_int // 60
+            m = m_int % 60
+            return f"{h:02d}:{m:02d}"
+
+        tasks = self.sort_by_time()
+        current_time = time_to_mins(day_start)
+        end_of_day = time_to_mins(day_end)
+        
+        for task in tasks:
+            task_start = time_to_mins(task.time)
+            # If there's a big enough gap before this task starts
+            if task_start - current_time >= task_duration:
+                return mins_to_time(current_time)
+            
+            # Jump to the end of the current task
+            task_end = task_start + task.duration
+            if task_end > current_time:
+                current_time = task_end
+                
+        # Check gap between last task and end of day
+        if end_of_day - current_time >= task_duration:
+            return mins_to_time(current_time)
+            
+        return "No available slots"
